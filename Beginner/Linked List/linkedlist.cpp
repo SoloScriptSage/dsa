@@ -23,6 +23,7 @@ public:
     void insertEndOptimal(int);
     void insertAfterK(int, int);
     void deleteByIndex(int);
+    void deleteFront();
     void sortList();
     void printList();
 
@@ -126,7 +127,7 @@ void LinkedList::insertAfterK(int value, int k) {
 }
 void LinkedList::deleteFront() {
     if (head == nullptr) {
-        cout << "List is empty. Nothing to delete."
+        cout << "List is empty. Nothing to delete.";
         return;
     }
 
