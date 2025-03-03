@@ -17,6 +17,8 @@ public:
     // Create the Node tail (for optimal insertion)
     Node* tail;
 
+    LinkedList() : head(nullptr), tail(nullptr) {}
+
     void insertFront(int);
     void insertEndNOptimal(int);
     void insertEndOptimal(int);
@@ -126,14 +128,16 @@ void LinkedList::deleteByIndex(int index) {
     if(head == NULL) {
         cout << "List is empty" << endl;
     }
-
-    while(_head != NULL) {
-        _head
+}
+void LinkedList::printList() {
+    Node* temp = head;
+    while (temp) {
+        cout << temp->value << " -> ";
+        temp = temp->next;
     }
+    cout << "NULL" << endl;
 }
 
-
-}
 int main() {
     LinkedList list;
     int choice, value, index;
