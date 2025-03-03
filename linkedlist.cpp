@@ -1,96 +1,76 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// Typedefs
-typedef long long ll;
-typedef unsigned long long ull;
-typedef double db;
-typedef pair<ll, ll> pll;
-typedef vector<int> vi;
-typedef vector<ll> vl;
-typedef vector<pll> vpl;
-typedef vector<vl> vve;
-typedef map<ll,ll> mll;
-typedef set<ll> sll;
+class Node {
+public:
+    int value;
+    Node* next;
 
-// Defines
-#define fast ios::sync_with_stdio(false); cin.tie(0); cout.tie(0)
-#define INF 1e9
-#define DIM 107
-#define f first
-#define s second
-#define pb push_back
-#define fill(a,val) memset(a, val, sizeof(a));
-#define rep(n) for(int i=0;i<n;++i)
-#define FOR(i,a,b) for(int i = a; i < b; ++i)
-#define sortv(v) sort(v.begin(), v.end())
-#define sortvr(v) sort(v.rbegin(), v.rend())
-#define MOD 1000000007
-#define ADD(a,b) ((a+b) % MOD)
-#define MUL(a,b) ((a*b) & MOD)
-#define endl "\n"
-#define LOCAL_TESTING 0
+    // Constructor to initialize the node with a given value
+    Node(int val) : value(val), next(nullptr) {}
+};
 
-// Templates
-template<typename T>
-constexpr T gcd(T m, T n) {
-    // Euclidean algorithm for finding GCD
-    while (n != 0) {
-        T temp = n;
-        n = m % n;
-        m = temp;
-    }
-    return m;
-}
+class LinkedList {
+public:
+    Node* head;
 
-template<typename T>
-constexpr T lcm(T m, T n) {
-    if (m == 0 || n == 0) return 0;
-    T abs_m = (m < 0) ? -m : m;
-    T abs_n = (n < 0) ? -n : n;
-    return (abs_m / gcd(abs_m, abs_n)) * abs_n;
-}
-ll inrange(ll num, ll LEFT, ll RIGHT){
-    return num >= LEFT && num <= RIGHT;
-}
+    void insertFront(int);
+    void insertEnd(int);
+    void deleteNode(int);
+    void sortList();
+    void printList();
 
-ll bs(ll b[], ll n, ll ai_1, ll ai){
-    ll l=0, h=n-1;
-    ll res;
-    while(l<=h){
-        ll m = (l+h)/2;
-
-        if(b[m]-ai >= ai_1){
-            res=m;
-            h=m-1;
-        }else
-            l=m+1;
+    void insertFront(int value) {
 
     }
-    return res;
 
-    //O(log N)
+    int getHeadValue() {
+        if(head == NULL) {
+            return -1;
+        }else {
+            return head->value;
+        }
+    }
+
+};
+
+void LinkedList::insertFront(int value) {
+    cout << "Inserting: " << value << "\n";
+
+    // Step 1: Creating a new node
+    Node* newNode = new Node(value);
+
+    // Step 2: Set next of newNode to the current head
+    newNode->next = head;
+
+    // Step 3: Set newNode as the head
+    head = newNode;
 }
 
-// Actual Code Starts Here
+void LinkedList::insertEnd(int value) {
+    cout << "Inserting" << value << "\n";
 
-void solve() {
-    int a, b, c, d, K;
-    cin >> a >> b >> c >> d >> K;
-    int sum = abs(a-c) + abs(b-d);
-    if(sum<=K && (K-sum)%2==0) cout << "YES\n";
-    else cout << "NO\n";
+    // Step 1: Creating a new node
+    Node* newNode = new Node(value);
+
+    // Step 2: Iterating through the whole list to find the end
+    Node* temp = head;
+    while(temp->next != NULL){
+        temp = temp->next;
+    }
+
+    // Step 3: After finding NULL, assigning our newNode
+    temp->next = newNode;
 }
 
 int main() {
-    fast;
+    LinkedList* someList = new LinkedList();
 
-    int t;
-    cin >> t;
+    someList->insertFront(3);
+    cout << "The value at the head is: " << someList -> getHeadValue() << "\n";
 
-    while (t--) {
-        solve();
-    }
+    someList.insertFront(2);
+    cout << "The valie at the head is: " << someList -> getHeadValue() << "\n";
 
     return 0;
 }
