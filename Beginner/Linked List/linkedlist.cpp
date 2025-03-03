@@ -13,7 +13,6 @@ public:
 class LinkedList {
 public:
     Node* head;
-
     // Create the Node tail (for optimal insertion)
     Node* tail;
 
@@ -61,6 +60,11 @@ void LinkedList::insertFront(int value) {
 
     // Step 3: Set newNode as the head
     head = newNode;
+
+    // Step 4: If the list  was empty. update tail to a new node
+    if (tail == nullptr) {
+        tail = newNode;
+    }
 }
 void LinkedList::insertEndNOptimal(int value) {
     // Create a new Node with initial value as value
@@ -71,6 +75,7 @@ void LinkedList::insertEndNOptimal(int value) {
     // Set the new node as head and return
     if(head == NULL) {
         head = newNode;
+        tail = newNode;
         return;
     }
 
@@ -119,15 +124,71 @@ void LinkedList::insertAfterK(int value, int k) {
     // And then node "current" takes next as newNode
     current -> next = newNode;
 }
-void LinkedList::deleteByIndex(int index) {
-    Node* _head = head;
-    Node* temp = temp;
-
-    int ll=0;
-
-    if(head == NULL) {
-        cout << "List is empty" << endl;
+void LinkedList::deleteFront() {
+    if (head == nullptr) {
+        cout << "List is empty. Nothing to delete."
+        return;
     }
+
+    // Store the current head node
+    Node* temp = head;
+
+    // Move head to the next node
+    head = head->next;
+
+    // If head becomes nullptr (list is now empty), update tail too
+    if (head == nullptr) {
+        tail = nullptr;
+    }
+
+    // Free the old head node
+    delete temp;
+}
+void LinkedList::deleteByIndex(int index) {
+    if (head == nullptr) {
+        cout << "List is empty, nothing to delete.";
+        return;
+    }
+
+    // Step 1: Check if we delete the front
+    if (index == 0) {
+        Node* temp = head;
+        head = head -> next;
+
+        // Step 1.1: If the next of the head is nullptr, then the list will become empty, so tail needs to be updated
+        if(head==nullptr) {
+            tail = nullptr;
+        }
+
+        delete temp;
+        return;
+    }
+
+
+    // Step 2: Iterating through the whole list, trying to find the index, but also check if the current != nullptr
+    Node* current = head;
+    Node* prev = nullptr;
+
+    for(int i = 0; i < index && current != nullptr; ++i) {
+        prev = current;
+        current = current -> next;
+    }
+
+    // Step 3: Check if index is out of bounds
+    if (current == nullptr) {
+        cout << "Invalid index" << endl;
+        return;
+    }
+
+    // Step 4: Update the previous node's next pointer
+    prev -> next = current -> next;
+
+    // If the deleted node was the last node, update tail
+    if (current->next == nullptr) {
+        tail = prev;
+    }
+
+    delete current;
 }
 void LinkedList::printList() {
     Node* temp = head;
@@ -142,7 +203,7 @@ int main() {
     LinkedList list;
     int choice, value, index;
     while (true) {
-        cout << "\n1. Insert Front\n2. Insert End (Non-Optimal)\n3. Insert End (Optimal)\n4. Insert After K\n5. Print List\n6. Exit\nEnter choice: ";
+        cout << "\n1. Insert Front\n2. Insert End (Non-Optimal)\n3. Insert End (Optimal)\n4. Insert After K\n5. Delete Front\n6. Delete by Index\n7. Print List\n8. Exit\nEnter choice: ";
         cin >> choice;
         switch (choice) {
             case 1:
@@ -166,9 +227,17 @@ int main() {
                 list.insertAfterK(value, index);
                 break;
             case 5:
-                list.printList();
+                list.deleteFront();
                 break;
             case 6:
+                cout << "Enter index to delete: ";
+                cin >> index;
+                list.deleteByIndex(index);
+                break;
+            case 7:
+                list.printList();
+                break;
+            case 8:
                 exit(0);
             default:
                 cout << "Invalid choice!" << endl;
@@ -176,3 +245,4 @@ int main() {
     }
     return 0;
 }
+
