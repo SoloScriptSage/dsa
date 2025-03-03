@@ -135,5 +135,40 @@ void LinkedList::deleteByIndex(int index) {
 
 }
 int main() {
+    LinkedList list;
+    int choice, value, index;
+    while (true) {
+        cout << "\n1. Insert Front\n2. Insert End (Non-Optimal)\n3. Insert End (Optimal)\n4. Insert After K\n5. Print List\n6. Exit\nEnter choice: ";
+        cin >> choice;
+        switch (choice) {
+            case 1:
+                cout << "Enter value: ";
+                cin >> value;
+                list.insertFront(value);
+                break;
+            case 2:
+                cout << "Enter value: ";
+                cin >> value;
+                list.insertEndNOptimal(value);
+                break;
+            case 3:
+                cout << "Enter value: ";
+                cin >> value;
+                list.insertEndOptimal(value);
+                break;
+            case 4:
+                cout << "Enter value and position: ";
+                cin >> value >> index;
+                list.insertAfterK(value, index);
+                break;
+            case 5:
+                list.printList();
+                break;
+            case 6:
+                exit(0);
+            default:
+                cout << "Invalid choice!" << endl;
+        }
+    }
     return 0;
 }
