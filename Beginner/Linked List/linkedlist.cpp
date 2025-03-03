@@ -2,7 +2,7 @@
     Author: Vladyslav Hirchuk
     Created: March 2025
     Description: Implementation of a Linked List with insertion, deletion, and sorting.
-    License: MIT (or specify your preferred license)
+    License: MIT
 */
 
 #include <bits/stdc++.h>
