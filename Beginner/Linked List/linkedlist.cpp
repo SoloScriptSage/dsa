@@ -25,13 +25,23 @@ public:
 
     LinkedList() : head(nullptr), tail(nullptr) {}
 
+    // Insertion
     void insertFront(int);
     void insertEndNOptimal(int);
     void insertEndOptimal(int);
     void insertAfterK(int, int);
+
+    // Deletion
     void deleteByIndex(int);
     void deleteFront();
-    void sortList();
+    void deleteEnd();
+
+    // Basic operations with L
+    void sort();
+    void reverse();
+    void search();
+    void length();
+
     void printList();
 
     int getHeadValue() {
@@ -132,6 +142,7 @@ void LinkedList::insertAfterK(int value, int k) {
     // And then node "current" takes next as newNode
     current -> next = newNode;
 }
+
 void LinkedList::deleteFront() {
     if (head == nullptr) {
         cout << "List is empty. Nothing to delete.";
@@ -198,6 +209,62 @@ void LinkedList::deleteByIndex(int index) {
 
     delete current;
 }
+void LinkedList::deleteEnd() {
+    if(head == nullptr) {
+        cout << "List is empty. Nothing to delete." << endl;
+        return;
+    }
+
+    // Only head exists
+    if(head->next == nullptr) {
+        delete head;
+        head = tail = nullptr;
+        return;
+    }
+
+    // Traversing through the whole list
+    Node* current = head;
+    while(current->next->next != nullptr) {
+        current = current->next;
+    }
+
+    delete current->next;
+    current->next = nullptr;
+    tail = current; // Update tail
+}
+
+void LinkedList::sort() {
+    // Bubble sort implementation (0(n^2)), yes, nothing is perfect
+    if(!head || !head -> next) return;
+
+    bool swapped;
+    do {
+        swapped = false;
+        Node* current = head;
+        while(current->next) {
+            if(current->value > current->next->value) {
+                swap(current->value, current->next->value);
+                swapped = true;
+            }
+            current = current->next;
+        }
+    }while(swapped);
+}
+void LinkedList::reverse() {
+    Node* prev = nullptr;
+    Node* current = head;
+    Node* next;
+
+    tail = head;
+
+    while(current != nullptr) {
+        next = current->next; // Store next
+        current->next = prev; // Reverse pointer
+        prev = current;
+        current = next;
+    }
+    head = prev;
+}
 void LinkedList::printList() {
     Node* temp = head;
     while (temp) {
@@ -211,7 +278,7 @@ int main() {
     LinkedList list;
     int choice, value, index;
     while (true) {
-        cout << "\n1. Insert Front\n2. Insert End (Non-Optimal)\n3. Insert End (Optimal)\n4. Insert After K\n5. Delete Front\n6. Delete by Index\n7. Print List\n8. Exit\nEnter choice: ";
+        cout << "1. Insert Front\n2. Insert End (Non-Optimal)\n3. Insert End (Optimal)\n4. Insert After K\n5. Delete Front\n6. Delete by Index\n7. Print List\n8. Exit\nEnter choice: ";
         cin >> choice;
         switch (choice) {
             case 1:
