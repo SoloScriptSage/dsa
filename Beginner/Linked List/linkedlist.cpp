@@ -24,7 +24,13 @@ public:
     Node* tail;
 
     LinkedList() : head(nullptr), tail(nullptr) {}
-
+    ~LinkedList() {  // Destructor to free memory
+        while (head) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+        }
+    }
     // Insertion
     void insertFront(int);
     void insertEndNOptimal(int);
@@ -39,10 +45,10 @@ public:
     // Basic operations with L
     void sort();
     void reverse();
-    void search();
-    void length();
+    bool find(int);
+    int length();
 
-    void printList();
+    void print();
 
     int getHeadValue() {
         if(head == NULL) {
@@ -53,18 +59,8 @@ public:
     }
 
     int getLastValue(){
-        if(head == NULL) {
-            return -1;
-        }else{
-            Node* current = head;
-            while(current -> next != NULL) {
-                current = current -> next;
-            }
-
-            return current -> value;
-        }
+        return (tail) ? tail->value : -1;
     }
-
 };
 
 void LinkedList::insertFront(int value) {
@@ -128,6 +124,7 @@ void LinkedList::insertAfterK(int value, int k) {
     // Set the new node as head and return
     if(head == NULL) {
         head = newNode;
+        tail = newNode;
         return;
     }
 
@@ -136,11 +133,22 @@ void LinkedList::insertAfterK(int value, int k) {
         current = current -> next;
     }
 
+    // Check if it's out of bounds that we can actually store that value
+    if(current == nullptr) {
+        cout << "Position is out of bounds" << endl;
+        delete newNode;
+        return;
+    }
+
     // The next node of our "current" becomes the next of the newNode
     newNode -> next = current -> next;
 
     // And then node "current" takes next as newNode
     current -> next = newNode;
+
+    if(newNode->next == nullptr) {
+        tail = newNode;
+    }
 }
 
 void LinkedList::deleteFront() {
@@ -171,15 +179,7 @@ void LinkedList::deleteByIndex(int index) {
 
     // Step 1: Check if we delete the front
     if (index == 0) {
-        Node* temp = head;
-        head = head -> next;
-
-        // Step 1.1: If the next of the head is nullptr, then the list will become empty, so tail needs to be updated
-        if(head==nullptr) {
-            tail = nullptr;
-        }
-
-        delete temp;
+        deleteFront();
         return;
     }
 
@@ -216,7 +216,7 @@ void LinkedList::deleteEnd() {
     }
 
     // Only head exists
-    if(head->next == nullptr) {
+    if(head == tail) {
         delete head;
         head = tail = nullptr;
         return;
@@ -228,9 +228,9 @@ void LinkedList::deleteEnd() {
         current = current->next;
     }
 
-    delete current->next;
-    current->next = nullptr;
-    tail = current; // Update tail
+    delete tail;
+    tail = current;
+    tail->next = nullptr; // Update tail
 }
 
 void LinkedList::sort() {
@@ -265,7 +265,28 @@ void LinkedList::reverse() {
     }
     head = prev;
 }
-void LinkedList::printList() {
+int LinkedList::length() {
+    int counter = 0;
+    Node* current = head;
+    while(current) {
+        counter++;
+        current = current->next;
+    }
+
+    return counter;
+}
+bool LinkedList::find(int value) {
+    Node* curr = head;
+    while(curr) {
+        if(curr->value == value) return true;
+        curr = curr->next;
+    }
+
+    return false;
+}
+
+
+void LinkedList::print() {
     Node* temp = head;
     while (temp) {
         cout << temp->value << " -> ";
@@ -277,8 +298,10 @@ void LinkedList::printList() {
 int main() {
     LinkedList list;
     int choice, value, index;
+
+    cout << "Linked List Implementation\n\n";
     while (true) {
-        cout << "1. Insert Front\n2. Insert End (Non-Optimal)\n3. Insert End (Optimal)\n4. Insert After K\n5. Delete Front\n6. Delete by Index\n7. Print List\n8. Exit\nEnter choice: ";
+        cout << "1. Insert Front\n2. Insert End (Non-Optimal)\n3. Insert End (Optimal)\n4. Insert After K\n5. Delete Front\n6. Delete by Index\n7. Print List\n8. Exit\n\nEnter choice: ";
         cin >> choice;
         switch (choice) {
             case 1:
@@ -310,7 +333,7 @@ int main() {
                 list.deleteByIndex(index);
                 break;
             case 7:
-                list.printList();
+                list.print();
                 break;
             case 8:
                 exit(0);
